@@ -1,0 +1,12 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "postgres",
+  "database": "wallets_db",
+  "entities": ["dist/entities/**/*.js"],
+  "synchronize": true,
+  "logging": false
+}
+
