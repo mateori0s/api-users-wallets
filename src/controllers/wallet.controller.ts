@@ -11,7 +11,10 @@ export class WalletController {
       const wallets = await walletService.getWalletsByUserId(userId);
       res.json(wallets);
     } catch (error: any) {
-      res.status(500).json({ error: error.message || 'Internal server error' });
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Internal server error',
+      });
     }
   }
 
@@ -23,11 +26,20 @@ export class WalletController {
       res.json(wallet);
     } catch (error: any) {
       if (error.message === 'Wallet not found') {
-        res.status(404).json({ error: error.message });
+        res.status(404).json({
+          success: false,
+          error: error.message,
+        });
       } else if (error.message === 'Access denied') {
-        res.status(403).json({ error: error.message });
+        res.status(403).json({
+          success: false,
+          error: error.message,
+        });
       } else {
-        res.status(500).json({ error: error.message || 'Internal server error' });
+        res.status(500).json({
+          success: false,
+          error: error.message || 'Internal server error',
+        });
       }
     }
   }
@@ -47,9 +59,20 @@ export class WalletController {
       res.status(201).json(wallet);
     } catch (error: any) {
       if (error.message === 'Wallet address already exists') {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({
+          success: false,
+          error: error.message,
+        });
+      } else if (error.message === 'User not found') {
+        res.status(404).json({
+          success: false,
+          error: error.message,
+        });
       } else {
-        res.status(500).json({ error: error.message || 'Internal server error' });
+        res.status(500).json({
+          success: false,
+          error: error.message || 'Internal server error',
+        });
       }
     }
   }
@@ -60,23 +83,44 @@ export class WalletController {
       const userId = req.userId!;
       const { tag, chain, address } = req.body;
 
-      const updateData: any = {
-        chain,
-        address,
-      };
-      if (tag !== undefined) updateData.tag = tag;
+      // Only include fields that are provided (partial update)
+      const updateData: any = {};
+      if (tag !== undefined) updateData.tag = tag || null;
+      if (chain !== undefined) updateData.chain = chain;
+      if (address !== undefined) updateData.address = address;
+
+      // Validate that at least one field is being updated
+      if (Object.keys(updateData).length === 0) {
+        res.status(400).json({
+          success: false,
+          error: 'At least one field (tag, chain, or address) must be provided for update',
+        });
+        return;
+      }
 
       const wallet = await walletService.updateWallet(id, userId, updateData);
       res.json(wallet);
     } catch (error: any) {
       if (error.message === 'Wallet not found') {
-        res.status(404).json({ error: error.message });
+        res.status(404).json({
+          success: false,
+          error: error.message,
+        });
       } else if (error.message === 'Access denied') {
-        res.status(403).json({ error: error.message });
+        res.status(403).json({
+          success: false,
+          error: error.message,
+        });
       } else if (error.message === 'Wallet address already exists') {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({
+          success: false,
+          error: error.message,
+        });
       } else {
-        res.status(500).json({ error: error.message || 'Internal server error' });
+        res.status(500).json({
+          success: false,
+          error: error.message || 'Internal server error',
+        });
       }
     }
   }
@@ -87,14 +131,26 @@ export class WalletController {
       const userId = req.userId!;
 
       await walletService.deleteWallet(id, userId);
-      res.json({ message: 'Wallet deleted successfully' });
+      res.json({
+        success: true,
+        message: 'Wallet deleted successfully',
+      });
     } catch (error: any) {
       if (error.message === 'Wallet not found') {
-        res.status(404).json({ error: error.message });
+        res.status(404).json({
+          success: false,
+          error: error.message,
+        });
       } else if (error.message === 'Access denied') {
-        res.status(403).json({ error: error.message });
+        res.status(403).json({
+          success: false,
+          error: error.message,
+        });
       } else {
-        res.status(500).json({ error: error.message || 'Internal server error' });
+        res.status(500).json({
+          success: false,
+          error: error.message || 'Internal server error',
+        });
       }
     }
   }

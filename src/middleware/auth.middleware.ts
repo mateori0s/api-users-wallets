@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt.util';
+import { isTokenBlacklisted } from '../utils/token-blacklist.util';
 
 export interface AuthRequest extends Request {
   userId?: string;
@@ -23,6 +24,15 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
       res.status(401).json({ 
         success: false,
         error: 'Token is required' 
+      });
+      return;
+    }
+
+    // Check if token is blacklisted (invalidated)
+    if (isTokenBlacklisted(token)) {
+      res.status(401).json({ 
+        success: false,
+        error: 'Token has been invalidated. Please sign in again.' 
       });
       return;
     }

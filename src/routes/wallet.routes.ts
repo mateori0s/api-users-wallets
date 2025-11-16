@@ -25,9 +25,26 @@ router.get(
 router.post(
   '/',
   [
-    body('chain').notEmpty().withMessage('Chain is required'),
-    body('address').notEmpty().withMessage('Address is required'),
-    body('tag').optional().isString(),
+    body('chain')
+      .isString()
+      .trim()
+      .notEmpty()
+      .withMessage('Chain is required')
+      .isLength({ min: 1, max: 100 })
+      .withMessage('Chain must be between 1 and 100 characters'),
+    body('address')
+      .isString()
+      .trim()
+      .notEmpty()
+      .withMessage('Address is required')
+      .isLength({ min: 1, max: 255 })
+      .withMessage('Address must be between 1 and 255 characters'),
+    body('tag')
+      .optional({ nullable: true, checkFalsy: true })
+      .isString()
+      .trim()
+      .isLength({ max: 255 })
+      .withMessage('Tag must be at most 255 characters'),
   ],
   validateRequest,
   (req: AuthRequest, res: Response) => walletController.createWallet(req, res)
@@ -38,9 +55,28 @@ router.put(
   '/:id',
   [
     param('id').isUUID().withMessage('Invalid wallet ID'),
-    body('tag').optional().isString(),
-    body('chain').notEmpty().withMessage('Chain is required'),
-    body('address').notEmpty().withMessage('Address is required'),
+    body('tag')
+      .optional({ nullable: true, checkFalsy: true })
+      .isString()
+      .trim()
+      .isLength({ max: 255 })
+      .withMessage('Tag must be at most 255 characters'),
+    body('chain')
+      .optional({ nullable: true })
+      .isString()
+      .trim()
+      .notEmpty()
+      .withMessage('Chain cannot be empty if provided')
+      .isLength({ min: 1, max: 100 })
+      .withMessage('Chain must be between 1 and 100 characters'),
+    body('address')
+      .optional({ nullable: true })
+      .isString()
+      .trim()
+      .notEmpty()
+      .withMessage('Address cannot be empty if provided')
+      .isLength({ min: 1, max: 255 })
+      .withMessage('Address must be between 1 and 255 characters'),
   ],
   validateRequest,
   (req: AuthRequest, res: Response) => walletController.updateWallet(req, res)
