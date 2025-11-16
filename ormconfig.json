@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "postgres",
-  "database": "wallets_db",
+  "database": "users_wallets_dev",
   "entities": ["dist/entities/**/*.js"],
   "synchronize": true,
   "logging": false

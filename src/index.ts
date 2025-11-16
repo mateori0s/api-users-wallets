@@ -1,12 +1,17 @@
 import 'reflect-metadata';
 import app from './app';
 import { AppDataSource } from './config/data-source';
+import { ensureDatabaseExists } from './config/db-init.util';
 
 const PORT = process.env.PORT || 3000;
 
 // Start server
 async function startServer() {
   try {
+    // Ensure database exists before connecting
+    // This is important for first-time setup or when reusing existing containers
+    await ensureDatabaseExists();
+
     // Initialize TypeORM DataSource
     await AppDataSource.initialize();
     console.log('Database connected successfully');
