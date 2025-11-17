@@ -25,9 +25,9 @@ A secure and modular backend API built with **Node.js**, **TypeScript**, **Expre
 ### Setup
 
 ```bash
-git clone <repo-url>
+npm install
 cp .env.example .env
-docker-compose up --build
+docker-compose up -d
 npm run dev
 ```
 
