@@ -1,28 +1,28 @@
-# 🛡️ Users and Wallets API
+# Users and Wallets API
 
 A secure and modular backend API built with **Node.js**, **TypeScript**, **Express**, and **PostgreSQL**, designed to manage users and their blockchain wallets.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 JWT-based authentication (Sign Up / Sign In / Sign Out)
-- 🧾 CRUD operations for user wallets
-- 🗃️ PostgreSQL + TypeORM ORM
-- 🧱 Clean architecture (Entities, Services, Controllers, Routes)
-- 🐳 Dockerized setup for local development
-- ✅ Tests with dedicated test database (no interference with dev data)
+- JWT-based authentication (Sign Up / Sign In / Sign Out)
+- CRUD operations for user wallets
+- PostgreSQL + TypeORM ORM
+- Clean architecture (Entities, Services, Controllers, Routes)
+- Dockerized setup for local development
+- Tests with dedicated test database (no interference with dev data)
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### 📦 Prerequisites
+### Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - `git` and optionally `Node.js` (only if running outside Docker)
 
-### ⚙️ Setup
+### Setup
 
 ```bash
 git clone <repo-url>
@@ -34,11 +34,11 @@ npm run dev
 The API will be available at: `http://localhost:3000`
 
 
-📥 You can import the included Postman collection in `api-users-wallets.postman_collection.json` to test endpoints.
+You can import the included Postman collection in `api-users-wallets.postman_collection.json` to test endpoints.
 
 ---
 
-## 🔐 Authentication Flow
+## Authentication Flow
 
 ### 1. **Sign Up**
 ```http
@@ -57,14 +57,14 @@ POST /api/auth/signin
   "password": "yourPassword"
 }
 ```
-📥 Response: `{ token: <JWT> }`
+Response: `{ token: <JWT> }`
 
 ### 3. **Sign Out**
 ```http
 POST /api/auth/signout
 Authorization: Bearer <token>
 ```
-🚫 The token is invalidated server-side (blacklisted).
+The token is invalidated server-side (blacklisted).
 
 All protected endpoints require:
 ```http
@@ -73,15 +73,15 @@ Authorization: Bearer <token>
 
 ---
 
-## 💼 Wallet Endpoints
+## Wallet Endpoints
 
-### 📄 GET /api/wallets
+### GET /api/wallets
 Returns all wallets for the authenticated user.
 
-### 📄 GET /api/wallets/:id
+### GET /api/wallets/:id
 Returns a specific wallet if owned by the authenticated user.
 
-### ➕ POST /api/wallets
+### POST /api/wallets
 ```json
 {
   "tag": "Label",
@@ -90,7 +90,7 @@ Returns a specific wallet if owned by the authenticated user.
 }
 ```
 
-### ✏️ PUT /api/wallets/:id
+### PUT /api/wallets/:id
 Update wallet
 ```json
 {
@@ -98,21 +98,22 @@ Update wallet
   "chain": "Ethereum",
   "address": "0xABC..."
 }
+```
 
-### ❌ DELETE /api/wallets/:id
+### DELETE /api/wallets/:id
 Deletes the wallet.
 
 ---
 
-## 🧠 JWT Behavior
+## JWT Behavior
 
-- ⏳ Tokens expire after `15m` (configurable via `.env`)
-- 🔄 Multiple sign-ins create independent tokens
-- 🚫 Tokens are **revoked** on sign out (via in-memory blacklist)
+- Tokens expire after `15m` (configurable via `.env`)
+- Multiple sign-ins create independent tokens
+- Tokens are **revoked** on sign out (via in-memory blacklist)
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Users
 | Field      | Type    | Constraints           |
@@ -136,7 +137,7 @@ Deletes the wallet.
 
 ---
 
-## ⚙️ Environment Variables (`.env`)
+## Environment Variables (`.env`)
 
 | Variable         | Description                        | Default                |
 |------------------|------------------------------------|------------------------|
@@ -153,15 +154,15 @@ Deletes the wallet.
 
 ---
 
-## 🧪 Testing
+## Testing
 
-### 🔄 Separate Test DB
+### Separate Test DB
 - Uses a completely isolated DB: `users_wallets_test`
 - Tables auto-created via `synchronize: true`
 - Cleanup with `TRUNCATE` before each test
 - No impact on dev or prod data
 
-### 🧰 Run Tests
+### Run Tests
 ```bash
 npm run test            # All tests
 npm run test:unit       # Unit tests only
@@ -171,7 +172,7 @@ npm run test:coverage   # With coverage
 
 ---
 
-## 🧱 Architecture Overview
+## Architecture Overview
 
 ```
 src/
@@ -189,14 +190,14 @@ src/
 
 ---
 
-## 📬 Postman Collection
+## Postman Collection
 
 Import the provided `Shield.postman_collection.json` in Postman to test all endpoints.
 
-💡 The `signin` request auto-saves the JWT token into `{{jwt_token}}` collection variable. All other requests use it automatically in the `Authorization` header.
+The `signin` request auto-saves the JWT token into `{{jwt_token}}` collection variable. All other requests use it automatically in the `Authorization` header.
 
 ---
 
-## 📄 License
+## License
 
 ISC License. Feel free to use and extend.
